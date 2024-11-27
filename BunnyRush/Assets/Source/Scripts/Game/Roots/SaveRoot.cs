@@ -36,6 +36,14 @@ public class SaveRoot : CompositeRoot
         LoadExtern();
     }
 
+    public void TrySetNewScore(int score)
+    {
+        if (score < _playerSaveData.TotalScore || _playerSaveData.TotalScore >= 9999999)
+            return;
+
+        SetNewTotalScore(score);
+    }
+
     public void SetNewTotalScore(int score)
     {
         if (score > _playerSaveData.TotalScore)
@@ -44,6 +52,14 @@ public class SaveRoot : CompositeRoot
         TotalScoreChanged?.Invoke();
         MyYandex.Instance.SetLiderboardValue(score);
         SaveData();
+    }
+
+    public void AddCoinsCount(int count)
+    {
+        var currentCount = _playerSaveData.TotalCoins;
+        var newCount = currentCount + count;
+
+        SetNewTotalCoinsCout(newCount);
     }
 
     public void SetNewTotalCoinsCout(int count)

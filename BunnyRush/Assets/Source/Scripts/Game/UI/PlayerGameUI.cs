@@ -39,6 +39,7 @@ public class PlayerGameUI : MonoBehaviour
 
     public void PlayerLose()
     {
+        CloseGamePanel();
         _losePanel.gameObject.SetActive(true);
         _losePanel.PlayerLose();
     }
@@ -51,6 +52,7 @@ public class PlayerGameUI : MonoBehaviour
 
     private void PauseGame()
     {
+        CloseGamePanel();
         ShowPausePanel();
         GameRoot.Instance.PauseGame();
     }

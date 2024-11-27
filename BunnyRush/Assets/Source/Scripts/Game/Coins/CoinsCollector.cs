@@ -14,6 +14,11 @@ public class CoinsCollector : MonoBehaviour
         OnCoinsCountChanged();
     }
 
+    public int GetCoinsCount()
+    {
+        return _currentLevelCoinsCount;
+    }
+
     public void OnCoinTaked()
     {
         _currentLevelCoinsCount++;

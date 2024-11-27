@@ -10,7 +10,10 @@ public class GameRoot : CompositeRoot
     [SerializeField] private MenuRoot _menuRoot;
     [SerializeField] private RoadTilesRoot _roadRoot;
     [SerializeField] private CoinsCollector _coinsCollector;
+    [SerializeField] private GameScore _gameScore;
     [SerializeField] private PlayerGameUI _playerGameUI;
+    public CoinsCollector CoinsCollector => _coinsCollector;
+    public GameScore GameScore => _gameScore;
 
     public override void Compose()
     {
@@ -34,29 +37,36 @@ public class GameRoot : CompositeRoot
     {
         MyYandex.Instance.StartGameplay();
         _playerGameUI.StartGame();
+        _coinsCollector.StartGame();
+        _gameScore.StartGame();
     }
 
     public void PauseGame()
     {
+        _gameScore.EndGame();
         Time.timeScale = 0f;
         MyYandex.Instance.StopGameplay();
     }
 
     public void ResumeGame()
     {
+        _gameScore.ResumeGame();
         Time.timeScale = 1f;
         MyYandex.Instance.StartGameplay();
     }
 
     public void PlayerLose()
-    {
+    {       
         _playerGameUI.PlayerLose();
         _roadRoot.EndGame();
+        _gameScore.EndGame();
     }
 
     public void EndGame()
     {
+        _gameScore.EndGame();
         _playerGameUI.gameObject.SetActive(false);
+        SaveRoot.Instance.AddCoinsCount(_coinsCollector.GetCoinsCount());
         MyYandex.Instance.StopGameplay();
     }
 
