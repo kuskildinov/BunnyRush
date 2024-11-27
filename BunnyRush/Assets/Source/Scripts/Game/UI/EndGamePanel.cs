@@ -16,6 +16,7 @@ public class EndGamePanel : MonoBehaviour
 
     private void ExitGame()
     {
+        GameRoot.Instance.EndGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

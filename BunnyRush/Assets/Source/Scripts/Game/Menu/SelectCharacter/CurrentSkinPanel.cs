@@ -9,6 +9,7 @@ public class CurrentSkinPanel : MonoBehaviour
     [SerializeField] private Text _totalCoinsText;
     [SerializeField] private Text _skinCostText;
     [SerializeField] private SelectSkinMenu _selectSkinMenu;
+   
     [Header("State Buttons")]
     [SerializeField] private Button _selectedButton;
     [SerializeField] private Button _notSelectedButton;
@@ -17,12 +18,14 @@ public class CurrentSkinPanel : MonoBehaviour
 
     public void Initialize()
     {
-
+        UpdateCoinsCountText();
+        CheckSkinCost();
     }
 
     private void OnEnable()
     {
-        _selectSkinMenu.OnSkinChanged += ChangeCurrentSkinView;
+        _selectSkinMenu.OnSkinChanged += ChangeCurrentSkinView;      
+        UpdateCoinsCountText();
     }
 
     private void OnDisable()
@@ -98,12 +101,32 @@ public class CurrentSkinPanel : MonoBehaviour
         }
     }
 
+    private void CheckSkinCost()
+    {
+        var coinsCount = SaveRoot.Instance.PlayerSaveData.TotalCoins;
+
+        if (_selectSkinMenu.CurrentSkin.Cost >= coinsCount)
+        {
+            _buyButton.interactable = false;
+        }
+        else
+        {
+            _buyButton.interactable = true;
+        }
+    }
+
     private void HideAllSkinBuyButtons()
     {
         _selectedButton.gameObject.SetActive(false);
         _notSelectedButton.gameObject.SetActive(false);
         _buyButton.gameObject.SetActive(false);
     }
+
+    private void UpdateCoinsCountText()
+    {
+        _totalCoinsText.text = SaveRoot.Instance.PlayerSaveData.TotalCoins.ToString();
+    }
+
 }
 
 public enum SkinState

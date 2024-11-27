@@ -12,7 +12,7 @@ public class PlayerData
     public PlayerData()
     {
         TotalScore = 0;
-        TotalCoins = 0;
+        TotalCoins = 999;
         SoundOn = true;
         CurrentSkinIndex = 0;
         MySkinsIndexes = new List<int>();
