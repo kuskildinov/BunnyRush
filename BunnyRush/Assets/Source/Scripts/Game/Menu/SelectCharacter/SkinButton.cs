@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SkinButton : MonoBehaviour
 {
+    [SerializeField] private SelectSkinMenu _selectMenu;
     [SerializeField] private Button _button;
     [SerializeField] private int _index;
     [SerializeField] private int _cost;
-    [SerializeField] private SelectSkinMenu _selectMenu;
 
     public int Index => _index;
     public int Cost => _cost;

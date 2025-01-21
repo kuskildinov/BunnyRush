@@ -35,6 +35,7 @@ public class PlayerGameUI : MonoBehaviour
     public void StartGame()
     {
         ShowGamePanel();
+        _losePanel.gameObject.SetActive(false);
     }
 
     public void PlayerLose()

@@ -8,17 +8,11 @@ public class PlayerRoot : CompositeRoot
 
     private Player _currentPlayer;
 
-    public override void Compose()
-    {      
-        PlayerInput input = new PlayerInput();
+    public Player Player => _currentPlayer;
 
-        int index = SaveRoot.Instance.PlayerSaveData.CurrentSkinIndex;
-        _currentPlayer = _playerSpawner.SpawnPlayer(index);  
-        if(_currentPlayer == null)
-        {
-            _currentPlayer = _playerSpawner.SpawnPlayer(0);
-        }
-        _currentPlayer.Initialize(input);
+    public override void Compose()
+    {       
+        SetNewPlayer();
     }
 
     private void OnEnable()
@@ -31,9 +25,36 @@ public class PlayerRoot : CompositeRoot
         _menuRoot.OnStartGameButtonClicked -= StartGame;
     }
 
+    public void SetNewPlayer()
+    {
+        if (_currentPlayer != null)
+            Destroy(_currentPlayer.gameObject);
+
+        PlayerInput input = new PlayerInput();
+        int index = SaveRoot.Instance.PlayerSaveData.CurrentSkinIndex;
+        _currentPlayer = _playerSpawner.SpawnPlayer(index);
+        if (_currentPlayer == null)
+        {
+            _currentPlayer = _playerSpawner.SpawnPlayer(0);
+        }
+        _currentPlayer.Initialize(input);
+    }
+
     public void StartGame()
     {
+        SetNewPlayer();
         _currentPlayer.StartGame();
+    }
+
+    public void ContinueGame()
+    {
+        _currentPlayer.ContinueGame();
+    }
+
+    public void ResumeGame()
+    {
+        SetNewPlayer();
+        _currentPlayer.ResumeGame();
     }
 
     public void ForceJump()

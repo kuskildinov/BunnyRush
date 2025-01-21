@@ -864,6 +864,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 4272713173799275359}
+  _meshes:
+  - {fileID: 1701474365692396772}
+  - {fileID: 5857235763448939552}
+  - {fileID: 2492201670859975590}
+  _invisibleMaterial: {fileID: 2100000, guid: d26f56c01d89c0c459774a6367f0d679, type: 2}
 --- !u!95 &4272713173799275359
 Animator:
   serializedVersion: 5
@@ -1740,6 +1745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f80bbfae7bc2240bfd54db6bf0438e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _deadInvisableTime: 6
   _playerJumper: {fileID: 229716972411627464}
   _playerVisual: {fileID: 231192511619547881}
 --- !u!136 &1097480739679318656

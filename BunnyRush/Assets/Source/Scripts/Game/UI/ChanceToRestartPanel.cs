@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ChanceToRestartPanel : MonoBehaviour
 {
+    [SerializeField] private Button _secondChanceButton;
     [Header("Timer")]
     [SerializeField] private float _saveTime;
     [SerializeField] private Image _timerHeartImage;
@@ -19,6 +20,16 @@ public class ChanceToRestartPanel : MonoBehaviour
 
         _timer = 0;
         _startTimer = true;
+    }
+
+    private void OnEnable()
+    {
+        _secondChanceButton.onClick.AddListener(OnSecondChanseButtonClicked);
+    }
+
+    private void OnDisable()
+    {
+        _secondChanceButton.onClick.RemoveAllListeners();
     }
 
     private void Update()
@@ -36,8 +47,30 @@ public class ChanceToRestartPanel : MonoBehaviour
         }
     }
 
+    public void Close()
+    {
+        StopTimer();
+        gameObject.SetActive(false);
+    }
+
+    public void StopTimer()
+    {
+        _timer = 0;
+        _startTimer = false;
+    }
+
     private void UpdateTimerImage()
     {
         _timerHeartImage.fillAmount = (_saveTime - _timer) / _saveTime;
+    }
+
+    private void OnSecondChanseButtonClicked()
+    {
+        StopTimer();
+#if !UNITY_EDITOR       
+        _losePanel.TryContinueGame();
+#else
+        _losePanel.ContinueGame();
+#endif
     }
 }

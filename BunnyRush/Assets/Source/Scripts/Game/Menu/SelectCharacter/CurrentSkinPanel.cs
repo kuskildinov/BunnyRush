@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class CurrentSkinPanel : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _skinPrefabs;
-    [SerializeField] private Text _totalCoinsText;
     [SerializeField] private Text _skinCostText;
     [SerializeField] private SelectSkinMenu _selectSkinMenu;
    
@@ -14,28 +13,31 @@ public class CurrentSkinPanel : MonoBehaviour
     [SerializeField] private Button _selectedButton;
     [SerializeField] private Button _notSelectedButton;
     [SerializeField] private Button _buyButton;
-    
 
+    private GameObject _currentSkinView;
     public void Initialize()
-    {
-        UpdateCoinsCountText();
+    {        
         CheckSkinCost();
+        _currentSkinView = _skinPrefabs[0];
     }
 
     private void OnEnable()
     {
-        _selectSkinMenu.OnSkinChanged += ChangeCurrentSkinView;      
-        UpdateCoinsCountText();
+        _notSelectedButton.onClick.AddListener(OnNotSelectButtonClicked);
+        _buyButton.onClick.AddListener(OnBuySkinButtonClicked);
     }
 
     private void OnDisable()
     {
-        _selectSkinMenu.OnSkinChanged -= ChangeCurrentSkinView;
+        _notSelectedButton.onClick.RemoveAllListeners();
+        _buyButton.onClick.RemoveAllListeners();
     }
 
-    private void ChangeCurrentSkinView(SkinButton newSkin)
+    public void ChangeCurrentSkinView(SkinButton newSkin)
     {
-        if(CheckSkinPurshased(newSkin))
+        UpdateCurrentSkinView(newSkin);
+
+        if (CheckSkinPurshased(newSkin))
         {
             if(CheckIsCurrent(newSkin))
             {
@@ -122,11 +124,30 @@ public class CurrentSkinPanel : MonoBehaviour
         _buyButton.gameObject.SetActive(false);
     }
 
-    private void UpdateCoinsCountText()
+    private void OnNotSelectButtonClicked()
     {
-        _totalCoinsText.text = SaveRoot.Instance.PlayerSaveData.TotalCoins.ToString();
+        _selectSkinMenu.SelectNewSkin();
     }
 
+    private void OnBuySkinButtonClicked()
+    {
+        _selectSkinMenu.TryBuyCurrentSkin();
+    }
+
+    private void UpdateCurrentSkinView(SkinButton newSkin)
+    {
+        if (_currentSkinView != null)
+            _currentSkinView.gameObject.SetActive(false);
+
+        for (int i = 0; i < _skinPrefabs.Count; i++)
+        {
+            if(i == newSkin.Index)
+            {
+                _skinPrefabs[i].gameObject.SetActive(true);
+                _currentSkinView = _skinPrefabs[i];
+            }
+        }
+    }
 }
 
 public enum SkinState

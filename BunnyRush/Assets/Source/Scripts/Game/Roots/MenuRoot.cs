@@ -5,6 +5,8 @@ public class MenuRoot : CompositeRoot
 {   
     [SerializeField] private MenuPanel _menuPanel;
     [SerializeField] private SelectSkinMenu _skinsMenu;
+    [SerializeField] private PlayerRoot _playerRoot;
+    [SerializeField] private SettingsPanel _settingsPanel;
 
     public event Action OnStartGameButtonClicked;
 
@@ -12,6 +14,8 @@ public class MenuRoot : CompositeRoot
 
     public override void Compose()
     {
+        MyYandex.Instance.ReadyGameplay();
+        AdvRoot.Instance.ShowInterstitialAdv();
         _menuPanel.Initialize();
     }
 
@@ -27,6 +31,11 @@ public class MenuRoot : CompositeRoot
         _menuPanel.MainMenuPanel.gameObject.SetActive(false);
     }
 
+    public void OpenSettings()
+    {
+        _settingsPanel.gameObject.SetActive(true);
+    }
+   
     public void StartGame()
     {
         OnStartGameButtonClicked?.Invoke();
@@ -38,5 +47,10 @@ public class MenuRoot : CompositeRoot
     public void EndGame()
     {
         _menuPanel.gameObject.SetActive(true);
+    }
+
+    public void OnPlayerSkinChanged()
+    {
+        _playerRoot.SetNewPlayer();
     }
 }

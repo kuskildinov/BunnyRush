@@ -7,6 +7,8 @@ public class MenuPanel : MonoBehaviour
     [SerializeField] private GameObject _mainMenuPanel;
     [SerializeField] private Button _startGameButton;
     [SerializeField] private Text _totalScoreText;
+    [Header("Settings")]
+    [SerializeField] private Button _settingsButton;
     [Header("Skin Menu")]
     [SerializeField] private SelectSkinMenu _selecSkinMenu;
     [SerializeField] private Button _openSkinMenuButton;
@@ -15,6 +17,8 @@ public class MenuPanel : MonoBehaviour
 
     public void Initialize()
     {
+        UpdateTotalScoreText();
+
         _selecSkinMenu.Initialize(_menuRoot);
     }
 
@@ -24,12 +28,14 @@ public class MenuPanel : MonoBehaviour
 
         _startGameButton.onClick.AddListener(OnStartGameButtonClicked);
         _openSkinMenuButton.onClick.AddListener(OpenSkinMenuButtonClicked);
+        _settingsButton.onClick.AddListener(OpenSettingsButtonClicked);
     }
 
     private void OnDisable()
     {
         _startGameButton.onClick.RemoveAllListeners();
         _openSkinMenuButton.onClick.RemoveAllListeners();
+        _settingsButton.onClick.RemoveAllListeners();
     }
 
     private void OnStartGameButtonClicked()
@@ -41,6 +47,11 @@ public class MenuPanel : MonoBehaviour
     {
         _menuRoot.OpenSelectSkinPanel();
     }
+
+    private void OpenSettingsButtonClicked()
+    {
+        _menuRoot.OpenSettings();
+    }   
 
     private void UpdateTotalScoreText()
     {

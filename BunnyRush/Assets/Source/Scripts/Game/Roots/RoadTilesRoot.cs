@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,13 +23,23 @@ public class RoadTilesRoot : CompositeRoot
     public void StartGame()
     {
         _spawner.OnGameStart();
-        _isGameStarted = true;
+        _isGameStarted = true;       
+    }
+
+    public void ResumeGame()
+    {
+        StartGame();
     }
 
     public void EndGame()
     {
         _isGameStarted = false;
         StopRoad();
+    }
+
+    public void SetNewTilesSpeed(float speed)
+    {
+        _spawner.SetNewTilesSpeed(speed);
     }
 
     public void StartRoad()

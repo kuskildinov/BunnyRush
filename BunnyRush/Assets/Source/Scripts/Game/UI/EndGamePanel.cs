@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EndGamePanel : MonoBehaviour
@@ -14,10 +13,14 @@ public class EndGamePanel : MonoBehaviour
         _totalScoreText.text = totalScore.ToString();
     }
 
+    public void Close()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void ExitGame()
     {
-        GameRoot.Instance.EndGame();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameRoot.Instance.EndGame(true);       
     }
 
     private void OnEnable()

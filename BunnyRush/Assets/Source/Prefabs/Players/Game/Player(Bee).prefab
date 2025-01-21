@@ -822,6 +822,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 4245822444034348764}
+  _meshes:
+  - {fileID: 1491432039176855990}
+  - {fileID: 3625256791254286775}
+  - {fileID: 5937833959887217010}
+  _invisibleMaterial: {fileID: 2100000, guid: d26f56c01d89c0c459774a6367f0d679, type: 2}
 --- !u!1 &5205670400456893909
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,6 +1629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f80bbfae7bc2240bfd54db6bf0438e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _deadInvisableTime: 6
   _playerJumper: {fileID: 229716972411627464}
   _playerVisual: {fileID: 3720495511061348375}
 --- !u!136 &1097480739679318656

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class CoinsCollector : MonoBehaviour
 {  
     [SerializeField] private GameCoinsVisual _gameCoinsVisual;
@@ -20,7 +17,7 @@ public class CoinsCollector : MonoBehaviour
     }
 
     public void OnCoinTaked()
-    {
+    {       
         _currentLevelCoinsCount++;
         OnCoinsCountChanged();
     }

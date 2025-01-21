@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +15,7 @@ public class MyYandex : CompositeRoot
     [DllImport("__Internal")]
     private static extern void StartGameplayInternal();
     [DllImport("__Internal")]
-    private static extern void StopGameplayInternal();
+    private static extern void StopGameplayInternal();   
     [DllImport("__Internal")]
     private static extern string GetLang();
     [DllImport("__Internal")]
@@ -32,8 +31,8 @@ public class MyYandex : CompositeRoot
             Destroy(this.gameObject);
 
 #if !UNITY_EDITOR
-        CheckIsInited();
-        SaveRoot.Instance.StartLoadData();
+        CheckIsInited();     
+       
 #else
         InitializeGame();
 #endif
@@ -50,12 +49,12 @@ public class MyYandex : CompositeRoot
 
     public void GameWindowOnFocus()
     {
-        //SoundsRoot.Instance.TryEnableSound();
+        SoundsRoot.Instance.TryEnableSound();
     }
 
     public void GameWindowOnBlur()
     {
-        //SoundsRoot.Instance.DisableSound();
+        SoundsRoot.Instance.TryDisableSound();
     }
 
     public void InitializeGame()
@@ -72,7 +71,7 @@ public class MyYandex : CompositeRoot
     public void StartGameplay()
     {
 #if !UNITY_EDITOR
-        StartCoroutine(StartGameplayRoutine());
+       StartGameplayInternal();
 #endif
     }
     public void StopGameplay()
@@ -84,29 +83,27 @@ public class MyYandex : CompositeRoot
 
     private IEnumerator StartInit()
     {       
+        yield return new WaitForSecondsRealtime(1f);       
+        SaveRoot.Instance.StartLoadData();
         yield return SetLanguageRoutine();
         yield return new WaitForSecondsRealtime(1f);
         SceneManager.LoadScene("GameScene");
-        yield return null;
     }
 
     private IEnumerator SetLanguageRoutine()
     {
-
 #if !UNITY_EDITOR
-        SetLanguage(GetLang());
-#else
-        SetLanguage("ru");
+        SetLanguage();
 #endif
         yield return null;
     }
 
-    private void SetLanguage(string lang)
+    private void SetLanguage()
     {
-        Language = lang;
-        if (lang == "en")
+        Language = GetLang();
+        if (Language == "en")
             Lean.Localization.LeanLocalization.SetCurrentLanguageAll("English");
-        else if (lang == "ru")
+        else if (Language == "ru")
             Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Russian");
     }
 
@@ -116,11 +113,4 @@ public class MyYandex : CompositeRoot
         SetToLeaderBoard(value);
 #endif
     }
-
-    private IEnumerator StartGameplayRoutine()
-    {
-        yield return new WaitForSecondsRealtime(1f);
-        StartGameplayInternal();
-    }
-
 }

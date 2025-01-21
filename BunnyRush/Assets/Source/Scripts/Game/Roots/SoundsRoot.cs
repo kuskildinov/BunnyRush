@@ -5,7 +5,17 @@ public class SoundsRoot : CompositeRoot
 {
     public static SoundsRoot Instance;
 
-    private bool _soundOn;
+    [SerializeField] private AudioSource _playerSource;
+    [SerializeField] private AudioSource _coinsSoundsSource;
+    [Header("Sounds")]
+    [SerializeField] private AudioClip _jumpSound;
+    [SerializeField] private AudioClip _takeHitSound;
+    [SerializeField] private AudioClip _coinTakedSound;
+
+    private bool _soundOn;    
+
+    public bool SoundOn => _soundOn;   
+
     public override void Compose()
     {
         if (Instance == null)
@@ -13,82 +23,76 @@ public class SoundsRoot : CompositeRoot
         else
             Destroy(gameObject);
 
-        _soundOn = SaveRoot.Instance.PlayerSaveData.SoundOn;
+        _soundOn = SaveRoot.Instance.PlayerSaveData.SoundOn;        
 
-        if (_soundOn)
-            EnableSound();
-        else
-            DisableSound();
+        CheckSounds();
     }
 
-    private void ChangeSoundState()
+    #region Sounds Configs
+    public void ChangeSoundState()
     {
         if (_soundOn)
         {
             _soundOn = false;
-            SoundButtonOff();
+            SaveRoot.Instance.PlayerSaveData.SoundOn = false;
             DisableSound();
         }
 
         else
         {
             _soundOn = true;
+            SaveRoot.Instance.PlayerSaveData.SoundOn = true;
             EnableSound();
-        }
-
-        CheckSoundButtonState();
+        }        
     }
 
-    public void CheckSoundButtonState()
+    private void CheckSounds()
     {
         if (_soundOn)
-        {
-            SoundButtonOn();
-        }
+            EnableSound();
+
         else
-        {
-            SoundButtonOff();
-        }
-
-        SaveRoot.Instance.PlayerSaveData.SoundOn = _soundOn;
-        SaveRoot.Instance.SaveData();
-    }
-
-    private void SoundButtonOn()
-    {
-        _soundOn = true;      
-    }
-
-    private void SoundButtonOff()
-    {
-        _soundOn = false;
-    }
-
-
-    private void OnEnable()
-    {
-        //_soundButton.onClick.AddListener(ChangeSoundState);
-    }
-
-    private void OnDisable()
-    {
-        //_soundButton.onClick.RemoveAllListeners();
+            TryDisableSound();
     }
 
     public void TryEnableSound()
     {
-        //if (_soundOn && AdsRoot.Instance.StartShowAd == false)
-        //    EnableSound();
+        if (_soundOn && AdvRoot.Instance.StartShowAd == false)
+            EnableSound();
+    }
+    public void TryDisableSound()
+    {
+        DisableSound();
     }
 
-    public void EnableSound()
+    private void EnableSound()
     {
         AudioListener.volume = 1f;
     }
 
-    public void DisableSound()
+    private void DisableSound()
     {
         AudioListener.volume = 0f;
     }
+
+    #endregion
+
+    #region All Sounds Play
+
+    public void PlayJumpSound()
+    {
+        _playerSource.PlayOneShot(_jumpSound);
+    }
+
+    public void PlayTakeHitSound()
+    {
+        _playerSource.PlayOneShot(_takeHitSound);
+    }
+    public void PlayCoinTakeSound()
+    {
+        _coinsSoundsSource.PlayOneShot(_coinTakedSound);
+    }
+
+    #endregion
 
 }

@@ -33,7 +33,9 @@ public class SaveRoot : CompositeRoot
 
     public void StartLoadData()
     {
+#if !UNITY_EDITOR
         LoadExtern();
+#endif
     }
 
     public void TrySetNewScore(int score)

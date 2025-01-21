@@ -1,22 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GameScore : MonoBehaviour
 {
     [SerializeField] private GameScoreVisual _gameScoreVisual;
-    [SerializeField] private float _oneScorePoint;
+    [SerializeField] private BestPlayerScoreView _bestPlayerScoreView;
 
     private float _currentLevelScore;
     private bool _isActive;
 
     public float CurrentLevelScore => _currentLevelScore;
 
+    public event Action OnScoreChanged;
+
     public void StartGame()
     {
-        _currentLevelScore = 0f;
+        _currentLevelScore = 0;
         GameScoreChanged();
-        _isActive = true;
+        _isActive = true;             
     }
 
     public void ResumeGame()
@@ -33,13 +34,14 @@ public class GameScore : MonoBehaviour
     public void GameScoreChanged()
     {
         _gameScoreVisual.OnScoreChanged(_currentLevelScore);
+        OnScoreChanged?.Invoke();
     }
 
     private void Update()
     {        
         if(_isActive)
         {           
-            _currentLevelScore += _oneScorePoint;
+            _currentLevelScore += Time.deltaTime * 5;
             GameScoreChanged();
         }
     }

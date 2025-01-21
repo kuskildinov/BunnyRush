@@ -44,11 +44,11 @@ mergeInto(LibraryManager.library,
         callbacks: {
           onOpen : () => {
             // Действие после открытия рекламы.
-            myGameInstance.SendMessage('AdsRoot', 'OnAdvOpend');
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvOpend');
           },
           onClose: (wasShown) => {
             // Действие после закрытия рекламы.
-            myGameInstance.SendMessage('AdsRoot', 'OnAdvClosed');
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvClosed');
           },
           onError: () => {
             // Действие в случае ошибки.
@@ -62,13 +62,50 @@ mergeInto(LibraryManager.library,
       ysdk.adv.showRewardedVideo({
         callbacks: {
           onOpen: () => {            
-            myGameInstance.SendMessage('AdsRoot', 'OnAdvOpend');
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvOpend');
           },
           onRewarded: () => {           
-            myGameInstance.SendMessage('AdsRoot', 'OnAdvRewarded');
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvRewarded');
           },
           onClose: () => {           
-            myGameInstance.SendMessage('AdsRoot', 'OnAdvClosed');
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvClosed');
+          },
+          onError: (e) => {
+            console.log('Error while open video ad:', e);
+          },
+        },
+      });
+    },
+
+    ShowRestartRewardAdInternal: function () {
+      ysdk.adv.showRewardedVideo({
+        callbacks: {
+          onOpen: () => {            
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvOpend');
+          },
+          onRewarded: () => {           
+            myGameInstance.SendMessage('AdvRoot', 'OnRestartAdvRewarded');
+          },
+          onClose: () => {           
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvClosed');
+          },
+          onError: (e) => {
+            console.log('Error while open video ad:', e);
+          },
+        },
+      });
+    },
+    ShowDoubleCoinRewardAdInternal: function () {
+      ysdk.adv.showRewardedVideo({
+        callbacks: {
+          onOpen: () => {            
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvOpend');
+          },
+          onRewarded: () => {           
+            myGameInstance.SendMessage('AdvRoot', 'OnDoubleCoinAdvRewarded');
+          },
+          onClose: () => {           
+            myGameInstance.SendMessage('AdvRoot', 'OnAdvClosed');
           },
           onError: (e) => {
             console.log('Error while open video ad:', e);
@@ -92,6 +129,15 @@ mergeInto(LibraryManager.library,
         .then(lb => {
           lb.setLeaderboardScore('BestRunner', value);
         });
+    },
+
+    GetBestPlayerName: function () {
+      ysdk.getLeaderboards()
+  .then(lb => {        
+    lb.getLeaderboardEntries('leaderboard2021', { quantityTop: 1 })
+      .then(res => myGameInstance.SendMessage('BestPlayerScoreView', 'SetBestPlayerName', res.publicName));
+  });
+      
     },
 
   });

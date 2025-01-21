@@ -6,10 +6,18 @@ using UnityEngine;
 public class RoadTileSpawner : MonoBehaviour
 {
     [SerializeField] private RoadTilesRoot _roadTileRoot;
+    [SerializeField] private GameLevelRoot _gameLevelRoot;
     [SerializeField] private RoadTile _emptyRoad;
-    [SerializeField] private List<RoadTile> _tilePrefabs;
     [SerializeField] private Transform _tilesContainer;
-   
+
+    private Vector2Int _levelOneEasyLimits = new Vector2Int(0,300);
+    private Vector2Int _levelOneHardLimits = new Vector2Int(300, 1000);
+
+    private Vector2Int _levelTwoEasyLimits = new Vector2Int(1000, 1300);
+    private Vector2Int _levelTwoHardLimits = new Vector2Int(1300, 2000);
+
+    private Vector2Int _levelThreeEasyLimits = new Vector2Int(2000, 2300);
+    private Vector2Int _levelThreeHardLimits = new Vector2Int(2300, 3000);
 
     private float _speed;
     private int _maxCount;
@@ -28,28 +36,62 @@ public class RoadTileSpawner : MonoBehaviour
         {
             if(i <= 2)
             {
-                GenerateTile(_emptyRoad);
+                GenerateLevelOneEmptyTile();
             }
             else
             {
-                RoadTile newTile = GetRandomTile();
-                GenerateTile(newTile);
+                GenerateLevelOneEasyTiles();
             }     
         }
     }
 
     private void Update()
     {
+        float score = (int)GameRoot.Instance.GameScore.CurrentLevelScore;
+      
         if (_roadTileRoot.Tiles.Count < _maxCount)
         {
-            RoadTile newTile = GetRandomTile();
-            GenerateTile(newTile);
+            if(score > _levelOneEasyLimits.x && score < _levelOneEasyLimits.y)
+            {
+                GenerateLevelOneEasyTiles();
+            }
+            else if (score >= _levelOneHardLimits.x && score < _levelOneHardLimits.y)
+            {
+                GenerateLevelOneHardTiles();
+            }
+
+            else if (score == _levelTwoEasyLimits.x)
+            {
+                GenerateLevelTwoEmptyTile();
+            }
+            if (score > _levelTwoEasyLimits.x && score < _levelTwoEasyLimits.y)
+            {
+                GenerateLevelTwoEasyTiles();
+            }
+            else if (score >= _levelTwoHardLimits.x && score < _levelTwoHardLimits.y)
+            {
+                GenerateLevelTwoHardTiles();
+            }
+
+            else if (score == _levelThreeEasyLimits.x)
+            {
+                GenerateLevelThreeEmptyTile();
+            }
+            else if (score > _levelThreeEasyLimits.x)
+            {
+                GenerateLevelThreeEasyTiles();
+            }
         }
     }
 
     public void OnGameStart()
     {
         OnGameStarted?.Invoke();
+    }
+
+    public void SetNewTilesSpeed(float speed)
+    {
+        _speed = speed;
     }
 
     public void DestroyTile(RoadTile tile)
@@ -70,9 +112,59 @@ public class RoadTileSpawner : MonoBehaviour
         }
     }
 
-    private RoadTile GetRandomTile()
+    #region Level 1
+    private void GenerateLevelOneEmptyTile()
     {
-        var randonIndex = UnityEngine.Random.Range(0, _tilePrefabs.Count);
-        return _tilePrefabs[randonIndex];
+        RoadTile newTile = _gameLevelRoot.GetEmptyTile(1f);
+        GenerateTile(newTile);
     }
+
+    private void GenerateLevelOneEasyTiles()
+    {
+        RoadTile newTile = _gameLevelRoot.GetRandomTile(1.1f);
+        GenerateTile(newTile);
+    }
+    private void GenerateLevelOneHardTiles()
+    {
+        RoadTile newTile = _gameLevelRoot.GetRandomTile(1.2f);
+        GenerateTile(newTile);
+    }
+    #endregion
+    #region Level 2
+    private void GenerateLevelTwoEmptyTile()
+    {
+        RoadTile newTile = _gameLevelRoot.GetEmptyTile(2f);
+        GenerateTile(newTile);
+    }
+
+    private void GenerateLevelTwoEasyTiles()
+    {
+        RoadTile newTile = _gameLevelRoot.GetRandomTile(2.1f);
+        GenerateTile(newTile);
+    }
+    private void GenerateLevelTwoHardTiles()
+    {
+        RoadTile newTile = _gameLevelRoot.GetRandomTile(2.2f);
+        GenerateTile(newTile);
+    }
+    #endregion
+    #region Level 3
+    private void GenerateLevelThreeEmptyTile()
+    {
+        RoadTile newTile = _gameLevelRoot.GetEmptyTile(3f);
+        GenerateTile(newTile);
+    }
+
+    private void GenerateLevelThreeEasyTiles()
+    {
+        RoadTile newTile = _gameLevelRoot.GetRandomTile(3.1f);
+        GenerateTile(newTile);
+    }
+    private void GenerateLevelThreeHardTiles()
+    {
+        RoadTile newTile = _gameLevelRoot.GetRandomTile(3.2f);
+        GenerateTile(newTile);
+    }
+    #endregion
+
 }

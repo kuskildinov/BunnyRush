@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerJumper : MonoBehaviour
@@ -14,6 +12,7 @@ public class PlayerJumper : MonoBehaviour
     private float _expiredTime;
     private IInput _input;
     private bool _isJumping;
+    public float Duration { get => _duration; set => _duration = value; }
 
     public void Initialize(Player player, IInput input)
     {
@@ -23,16 +22,19 @@ public class PlayerJumper : MonoBehaviour
 
     private void Update()
     {
-        TryDesktopJump();
+        if (_player.IsAlive == false)
+            return;
+
+        TryJump();
     }
 
-    private void TryDesktopJump()
+    private void TryJump()
     {       
-        if (_input.Jump() && _isJumping == false)
-        {
-            _isJumping = true;
-            _player.ChangeState(PlayerState.Jump);
-        }       
+        //if (_input.Jump() && _isJumping == false)
+        //{
+        //    _isJumping = true;
+        //    _player.ChangeState(PlayerState.Jump);
+        //}       
         if (_isJumping)
         {
             JumpRoutine();
@@ -41,13 +43,17 @@ public class PlayerJumper : MonoBehaviour
 
     public void TryScreenJump()
     {
+        if (_isJumping == true)
+            return;
+
         _isJumping = true;
+        SoundsRoot.Instance.PlayJumpSound();
         _player.ChangeState(PlayerState.Jump);
         JumpRoutine();
     }
 
     private void JumpRoutine()
-    {
+    {      
         _expiredTime += Time.deltaTime;
 
         if (_expiredTime > _duration)

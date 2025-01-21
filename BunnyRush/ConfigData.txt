@@ -1,0 +1,6 @@
+Depence speed by score          Player duration                Platforms speed
+Level 1   (score 0 - 500)          0.7f                               10
+Level 2 (score 500 - 1000)         0.55f                              15
+Level 3 (score 1000 - 1500)        0.4f                               20
+Level 4 (score 1500 - 2000)        0.25f                              25
+Level 4 (score > 2000)             0.1f                               30
